@@ -8,6 +8,8 @@ class Person implements JsonSerializable {
 	private $firstName;
 	private $lastName;
 	private $birthdate;
+	private $picture;
+	private $character;
 
 	public function __construct($data = array()) {
 		if(is_array($data)) {
@@ -25,6 +27,14 @@ class Person implements JsonSerializable {
 
 			if(isset($data['birthdate'])) {
 				$this->setBirthdate($data['birthdate']);
+			}
+
+			if(isset($data['picture'])) {
+				$this->setPicture($data['picture']);
+			}
+
+			if(isset($data['character'])) {
+				$this->setCharacter($data['character']);
 			}
 		}
 	}
@@ -67,12 +77,30 @@ class Person implements JsonSerializable {
 		$this->birthdate = $birthdate;
 	}
 
+	public function getPicture() {
+		return $this->picture;
+	}
+
+	public function setPicture($picture) {
+		$this->picture = $picture;
+	}
+
+	public function getCharacter() {
+		return $this->character;
+	}
+
+	public function setCharacter($character) {
+		$this->character = $character;
+	}
+
 	public function jsonSerialize() {
 		return [
 			'id' => $this->getId(),
 			'first_name' => $this->getFirstName(),
 			'last_name' => $this->getLastName(),
-			'birthdate' => $this->getBirthdate()
+			'birthdate' => $this->getBirthdate(),
+			'picture' => $this->getPicture(),
+			'character' => $this->getCharacter()
 		];
 	}
 }

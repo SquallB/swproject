@@ -8,6 +8,7 @@ class Film implements JsonSerializable {
 	private $name;
 	private $releaseDate;
 	private $runningTime;
+	private $image;
 	private $people;
 
 	public function __construct($data = array()) {
@@ -22,6 +23,10 @@ class Film implements JsonSerializable {
 
 			if(isset($data['release_date'])) {
 				$this->setReleaseDate($data['release_date']);
+			}
+
+			if(isset($data['image'])) {
+				$this->setImage($data['image']);
 			}
 
 			if(isset($data['running_time'])) {
@@ -68,6 +73,16 @@ class Film implements JsonSerializable {
 		}
 	}
 
+	public function getImage() {
+		return $this->image;
+	}
+
+	public function setImage($image) {
+		if(is_string($image)) {
+			$this->image = $image;
+		}
+	}
+
 	public function getPeople() {
 		return $this->people;
 	}
@@ -84,6 +99,7 @@ class Film implements JsonSerializable {
 			'name' => $this->getName(),
 			'release_date' => $this->getReleaseDate(),
 			'running_time' => $this->getRunningTime(),
+			'image' => $this->getImage(),
 			'people' => $this->getPeople()
 		];
 	}

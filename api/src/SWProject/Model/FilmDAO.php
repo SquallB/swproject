@@ -14,6 +14,10 @@ class FilmDAO extends DAO {
 		$personDAO = new PersonDAO($this->getConnection());
 		$parameters = array(':id' => $id);
 
+		$stmt2 = $this->getConnection()->prepare('
+			SELECT name FROM characters WHERE id_person = :id_person
+		');
+
 		$stmt = $this->getConnection()->prepare('
 			SELECT * FROM has_role WHERE id_film = :id
 		');
@@ -25,7 +29,14 @@ class FilmDAO extends DAO {
 				$roles[$idRole] = $roleDAO->find($idRole)->getName();
 			}
 
-			$result[$roles[$idRole]][] = $personDAO->find($row['id_person']);
+			$person = $personDAO->find($row['id_person']);
+			if($roles[$idRole] === 'actor') {
+				$stmt2->execute(array(':id_person' => $person->getId()));
+				if($character = $stmt2->fetch()) {
+					$person->setCharacter($character['name']);
+				}
+			}
+			$result[$roles[$idRole]][] = $person;
 		}
 
 		return $result;
@@ -119,10 +130,11 @@ class FilmDAO extends DAO {
 				$id = $this->update($data);
 			}
 			else {
-				$parameters = array(':name' => $data->getName(), ':release_date' => $data->getReleaseDate(), ':running_time' => $data->getRunningTime());
+				$parameters = array(':name' => $data->getName(), ':release_date' => $data->getReleaseDate(), ':running_time' => $data->getRunningTime(),
+									':image' => $data->getImage());
 
 				$stmt = $this->getConnection()->prepare('
-					INSERT INTO film (name, release_date, running_time) VALUES (:name, :release_date, :running_time)
+					INSERT INTO film (name, release_date, running_time, image) VALUES (:name, :release_date, :running_time, :image)
 				');
 				$stmt->execute($parameters);
 
@@ -138,10 +150,10 @@ class FilmDAO extends DAO {
 
 		if($data !== null && $data instanceof Film) {
 			$parameters = array(':id' => $data->getId(), ':name' => $data->getName(), ':release_date' => $data->getReleaseDate(),
-								':running_time' => $data->getRunningTime());
+								':running_time' => $data->getRunningTime(), ':image' => $data->getImage());
 
 			$stmt = $this->getConnection()->prepare('
-				UPDATE film SET name = :name, release_date = :release_date, running_time = :running_time WHERE id = :id
+				UPDATE film SET name = :name, release_date = :release_date, running_time = :running_time, image = :image WHERE id = :id
 			');
 			$stmt->execute($parameters);
 

@@ -49,10 +49,11 @@ class PersonDAO extends DAO {
 				$id = $this->update($data);
 			}
 			else {
-				$parameters = array(':first_name' => $data->getFirsName(), ':last_name' => $data->getLastName(), ':birthdate' => $data->getBirthdate());
+				$parameters = array(':first_name' => $data->getFirsName(), ':last_name' => $data->getLastName(), ':birthdate' => $data->getBirthdate(),
+									':picture' => $data->getPicture());
 
 				$stmt = $this->getConnection()->prepare('
-					INSERT INTO person (first_name, last_name, birthdate) VALUES (:first_name, :last_name, :birthdate)
+					INSERT INTO person (first_name, last_name, birthdate, picture) VALUES (:first_name, :last_name, :birthdate, :picture)
 				');
 				$stmt->execute($parameters);
 
@@ -68,10 +69,10 @@ class PersonDAO extends DAO {
 
 		if($data !== null && $data instanceof Person) {
 			$parameters = array(':id' => $data->getId(), ':first_name' => $data->getFirsName(), ':last_name' => $data->getLastName(),
-								':birthdate' => $data->getBirthdate());
+								':birthdate' => $data->getBirthdate(), ':picture' => $data->getPicture());
 
 			$stmt = $this->getConnection()->prepare('
-				UPDATE person SET first_name = :first_name, last_name = :last_name, birthdate = :birthdate WHERE id = :id
+				UPDATE person SET first_name = :first_name, last_name = :last_name, birthdate = :birthdate, picture = :picture WHERE id = :id
 			');
 			$stmt->execute($parameters);
 

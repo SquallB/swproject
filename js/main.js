@@ -44,5 +44,35 @@
 			controllerAs: 'form'
 		};
 	});
-})();
 
+	app.directive('film', function() {
+		return {
+			restrict: 'E',
+			templateUrl: 'film.html',
+			controller: ['$http', '$scope', function($http, $scope) {
+				$scope.film = null;
+				var c = $('#thumbcarousel');
+				$scope.nbActorsActive = Math.ceil($('#thumbcarousel').width() / 200);
+
+				$scope.changeFilm = function(id) {
+					$http({
+					    method: 'GET',
+					    url: 'http://localhost/swproject/api/film/' + id
+					}).
+					success(function(data, status) {
+			          if(status === 200) {
+			          	$scope.film = data;
+
+			          	$scope.itemsRange = [];
+
+			          	for(var i = $scope.nbActorsActive; i < data.people.actor.length; i += $scope.nbActorsActive) {
+			          		$scope.itemsRange.push(i);
+			          	}
+			          }
+			        });
+			    }
+			}],
+			controllerAs: 'filmCtrl'
+		};
+	});
+})();
