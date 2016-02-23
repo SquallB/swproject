@@ -68,5 +68,22 @@
 	width: 100%;	
 }
 .control1.left, .control1.right {
-    background-image: none
+    background-image: none;
 }
+
+.navbar {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+}
+.navbar-default.transparent {
+	background-color: transparent;
+}
+
+.wrapper {
+ 
+  width: 100%;
+  height: 650px;
+}
+
