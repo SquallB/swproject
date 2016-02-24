@@ -131,10 +131,10 @@ class FilmDAO extends DAO {
 			}
 			else {
 				$parameters = array(':name' => $data->getName(), ':release_date' => $data->getReleaseDate(), ':running_time' => $data->getRunningTime(),
-									':image' => $data->getImage());
+									':image' => $data->getImage(), ':summary' => $data->getSummary());
 
 				$stmt = $this->getConnection()->prepare('
-					INSERT INTO film (name, release_date, running_time, image) VALUES (:name, :release_date, :running_time, :image)
+					INSERT INTO film (name, release_date, running_time, image, summary) VALUES (:name, :release_date, :running_time, :image, :summary)
 				');
 				$stmt->execute($parameters);
 
@@ -150,10 +150,10 @@ class FilmDAO extends DAO {
 
 		if($data !== null && $data instanceof Film) {
 			$parameters = array(':id' => $data->getId(), ':name' => $data->getName(), ':release_date' => $data->getReleaseDate(),
-								':running_time' => $data->getRunningTime(), ':image' => $data->getImage());
+								':running_time' => $data->getRunningTime(), ':image' => $data->getImage(), ':summary' => $data->getSummary());
 
 			$stmt = $this->getConnection()->prepare('
-				UPDATE film SET name = :name, release_date = :release_date, running_time = :running_time, image = :image WHERE id = :id
+				UPDATE film SET name = :name, release_date = :release_date, running_time = :running_time, image = :image, summary = :summary WHERE id = :id
 			');
 			$stmt->execute($parameters);
 

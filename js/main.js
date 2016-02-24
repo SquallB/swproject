@@ -53,23 +53,52 @@
 				$scope.film = null;
 				var c = $('#thumbcarousel');
 				$scope.nbActorsActive = Math.ceil($('#thumbcarousel').width() / 200);
+				$scope.filmId = -1;
 
-				$scope.changeFilm = function(id) {
-					$http({
-					    method: 'GET',
-					    url: 'http://localhost/swproject/api/film/' + id
-					}).
-					success(function(data, status) {
-			          if(status === 200) {
-			          	$scope.film = data;
+				$http({
+				    method: 'GET',
+				    url: 'http://localhost/swproject/api/film/'
+				}).
+				success(function(data, status) {
+		          if(status === 200) {
+		          	$scope.films = data;
+		          	$scope.filmId = 0;
+		          	$scope.changeFilm(0);		          	
+		          }
+		         });
 
-			          	$scope.itemsRange = [];
+				$scope.changeFilm = function() {
+					$scope.film = $scope.films[$scope.filmId];
 
-			          	for(var i = $scope.nbActorsActive; i < data.people.actor.length; i += $scope.nbActorsActive) {
+					if($scope.film.people.actor !== undefined) {
+						$scope.itemsRange = [];
+
+			          	for(var i = $scope.nbActorsActive; i < $scope.film.people.actor.length; i += $scope.nbActorsActive) {
 			          		$scope.itemsRange.push(i);
 			          	}
-			          }
-			        });
+		          	}
+			    }
+
+			    $scope.nextFilm = function() {
+			    	if(($scope.filmId + 1) < $scope.films.length) {
+			    		$scope.filmId++;
+			    	}
+			    	else {
+			    		$scope.filmId = 0;
+			    	}
+
+			    	$scope.changeFilm();
+			    }
+
+			    $scope.previousFilm = function() {
+			    	if(($scope.filmId - 1) > -1) {
+			    		$scope.filmId--;
+			    	}
+			    	else {
+			    		$scope.filmId = $scope.films.length -1;
+			    	}
+
+			    	$scope.changeFilm();
 			    }
 			}],
 			controllerAs: 'filmCtrl'
