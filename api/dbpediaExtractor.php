@@ -65,10 +65,10 @@ $query = '  PREFIX : <http://dbpedia.org/resource/>
 			WHERE {
 				:Star_Wars dbpedia2:films ?uri.
 				?uri rdfs:label ?titre;
-				dbo:abstract ?summary;
-                dbo:runtime ?runtime.
+				dbo:abstract ?summary.                
                 OPTIONAL {
-                    ?uri dbo:thumbnail ?picture.
+                    ?uri dbo:thumbnail ?picture;
+                    dbo:runtime ?runtime.
                 }
 				FILTER ( lang(?titre) = "en" )
 				FILTER ( lang(?summary) = "en" )
@@ -80,6 +80,10 @@ foreach ($films as $film) {
     $picture = '';
     if(isset($film['picture'])) {
         $picture = $film['picture']['value'];
+    }
+    $runtime = 0;
+    if(isset($film['runtime'])) {
+        $picture = $film['runtime']['value'];
     }
 
     $filmObject = new Film(array('name' => $film['titre']['value'], 'summary' => $film['summary']['value'], 'release_date' => '1970-01-01', 'running_time' => intval($film['runtime']['value']), 'image' => $picture));

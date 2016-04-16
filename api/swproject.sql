@@ -84,21 +84,6 @@ CREATE TABLE IF NOT EXISTS `person` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
---
--- Contenu de la table `person`
---
-
-INSERT INTO `person` (`id`, `first_name`, `last_name`, `birthdate`, `picture`) VALUES
-(1, 'Harrison', 'Ford', '1942-07-13', 'harrison_ford.jpg'),
-(2, 'Mark', 'Hamill', '1951-09-25', 'mark_hamill.jpg'),
-(3, 'Carrie', 'Fisher', '1956-10-21', 'carrie_fisher.jpg'),
-(4, 'Peter', 'Cushing', '1913-05-26', 'peter_cushing.jpg'),
-(5, 'Alec', 'Guinness', '1914-04-02', 'alec_guinness.jpg'),
-(6, 'Anthony', 'Daniels', '1946-02-21', 'anthony_daniels.jpg'),
-(7, 'George', 'Lucas', '1944-05-14', 'george_lucas.jpg'),
-(8, 'Irvin', 'Kershner', '1923-04-29', ''),
-(9, 'Lawrence', 'Kasdan', '1949-01-14', '');
-
 -- --------------------------------------------------------
 
 --
