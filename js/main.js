@@ -65,26 +65,26 @@
 					$scope.films = data;
 					$scope.filmId = 0;
 					$scope.changeFilm(0);
+
+				  	for(var film in data) {
+					  $http({
+						  method: 'POST',
+						  url: 'http://localhost/swproject/api/film/',
+						  data: "film=" + JSON.stringify(film),
+						  headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+					  })
+				  }
 				  }
 				  else {
 					  $http({
 						  method: 'GET',
-						  url: 'http://localhost/swproject/api/dbpedia/'
+						  url: 'http://localhost/swproject/api/film/'
 					  }).
 					  success(function(data, status) {
 						  if(status === 200) {
 							  $scope.films = data;
 							  $scope.filmId = 0;
 							  $scope.changeFilm(0);
-
-							  for(var film in $scope.films) {
-								  $http({
-									  method: 'POST',
-									  url: 'http://localhost/swproject/api/dbpedia/',
-									  data: "film=" + JSON.stringify(film),
-									  headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-								  })
-							  }
 						  }
 					  });
 				  }

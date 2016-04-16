@@ -24,15 +24,12 @@ class DBpediaControllerProvider implements ControllerProviderInterface {
         $query = '  PREFIX dbo: <http://dbpedia.org/ontology/>
                 PREFIX dbp: <http://dbpedia.org/property/name/>
                 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-                SELECT ?name ?birthDate ?abstract ?picture
+                SELECT ?name ?birthDate ?abstract
                 WHERE {
                 <'.$uri.'> dbo:'.$role.' ?starring.
                 ?starring rdfs:label ?name;
                 dbo:birthDate ?birthDate;
                 dbo:abstract ?abstract.
-                OPTIONAL {
-                    ?starring dbo:thumbnail ?picture.
-                }
                 FILTER ( lang(?abstract) = "en" )
                 FILTER ( lang(?name) = "en" )
             }';
@@ -46,9 +43,7 @@ class DBpediaControllerProvider implements ControllerProviderInterface {
             $firstName = substr($name, 0, $lastSpace);
             $lastName = substr($name, $lastSpace + 1);
             $picture = '';
-            if(isset($film['picture'])) {
-                $picture = $film['picture']['value'];
-            }
+
             $person = new Person(array('first_name' => $firstName, 'last_name' => $lastName, 'birthdate' => $actor['birthDate']['value'], 'picture' => $picture));
             $array[] = $person;
         }
@@ -76,14 +71,13 @@ class DBpediaControllerProvider implements ControllerProviderInterface {
                 PREFIX dbpedia2: <http://dbpedia.org/property/>
                 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
                 PREFIX dbo: <http://dbpedia.org/ontology/>
-                SELECT ?titre ?uri ?summary ?runtime ?picture 
+                SELECT ?titre ?uri ?summary ?runtime 
                 WHERE {
                     :Star_Wars dbpedia2:films ?uri.
                     ?uri rdfs:label ?titre;
                     dbo:abstract ?summary.                
                     OPTIONAL {
-                        ?uri dbo:thumbnail ?picture;
-                        dbo:runtime ?runtime.
+                        ?uri dbo:runtime ?runtime.
                     }
                     FILTER ( lang(?titre) = "en" )
                     FILTER ( lang(?summary) = "en" )
@@ -93,12 +87,9 @@ class DBpediaControllerProvider implements ControllerProviderInterface {
             foreach ($films as $film) {
                 $uri = $film['uri']['value'];
                 $picture = '';
-                if (isset($film['picture'])) {
-                    $picture = $film['picture']['value'];
-                }
                 $runtime = 0;
                 if (isset($film['runtime'])) {
-                    $runtime = $film['runtime']['value'];
+                    $runtime = $film['runtime']['value'] / 60;
                 }
 
                 $filmObject = new Film(array('name' => $film['titre']['value'], 'summary' => $film['summary']['value'], 'release_date' => '1970-01-01', 'running_time' => intval($runtime), 'image' => $picture));
@@ -106,7 +97,7 @@ class DBpediaControllerProvider implements ControllerProviderInterface {
                 $people['actor'] = self::getPersons($uri, 'starring');
                 $people['writer'] = self::getPersons($uri, 'writer');
                 $people['director'] = self::getPersons($uri, 'director');
-                $people['musicComposer'] = self::getPersons($uri, 'musicComposer');
+                $people['composer'] = self::getPersons($uri, 'musicComposer');
                 $filmObject->setPeople($people);
 
                 $result[] = $filmObject;
