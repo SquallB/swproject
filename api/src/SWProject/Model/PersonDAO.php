@@ -49,7 +49,7 @@ class PersonDAO extends DAO {
 				$id = $this->update($data);
 			}
 			else {
-				$parameters = array(':first_name' => $data->getFirsName(), ':last_name' => $data->getLastName(), ':birthdate' => $data->getBirthdate(),
+				$parameters = array(':first_name' => $data->getFirstName(), ':last_name' => $data->getLastName(), ':birthdate' => $data->getBirthdate(),
 									':picture' => $data->getPicture());
 
 				$stmt = $this->getConnection()->prepare('

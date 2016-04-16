@@ -48,22 +48,45 @@ class FilmDAO extends DAO {
 		$peopleIds = array();
 
 		$stmt1 = $this->getConnection()->prepare('
-			SELECT * FROM has_role WHERE id_film = :id_film AND id_person = :id_person
+			SELECT * FROM has_role WHERE id_film = :id_film AND id_person = :id_person AND id_role = :id_role
 		');
 
 		$stmt2 = $this->getConnection()->prepare('
-			INSERT INTO has_role (id_film, id_user) VALUES (:id_film, :id_person)
+			INSERT INTO has_role (id_film, id_person, id_role) VALUES (:id_film, :id_person, :id_role)
 		');
 		$parameters = array(':id_film' => $film->getId(), ':id_person' => 0);
 
-		foreach($people as $person) {
-			$peopleIds[] = $person->getId();
-			$parameters[':id_person'] = $person->getId();
+		$stmt3 = $this->getConnection()->prepare('
+			SELECT id FROM role WHERE name = :name
+		');
 
-			$stmt1->execute($parameters);
-			if($stmt1->rowCount() === 0) {
-				$stmt2->execute($parameters);
-			}			
+		$stmt4 = $this->getConnection()->prepare('
+			INSERT INTO role (name) VALUES (:name)
+		');
+
+		foreach($people as $role => $rolePeople) {
+			$parameters2 = array('name' => $role);
+			$stmt3->execute($parameters2);
+			if ($stmt3->rowCount() === 0) {
+				$stmt4->execute($parameters2);
+				$roleId = $this->getConnection()->lastInsertId();
+			}
+			else {
+				$roleId = $stmt3->fetch()['id'];
+			}
+
+			$parameters[':id_role'] = $roleId;
+
+			foreach($rolePeople as $person) {
+				$personId = $personDAO->save($person);
+				$peopleIds[] = $personId;
+				$parameters[':id_person'] = $personId;
+
+				$stmt1->execute($parameters);
+				if ($stmt1->rowCount() === 0) {
+					$stmt2->execute($parameters);
+				}
+			}
 		}
 
 		$stmt = $this->getConnection()->prepare('
@@ -139,7 +162,10 @@ class FilmDAO extends DAO {
 				$stmt->execute($parameters);
 
 				$id = $this->getConnection()->lastInsertId();
+				$data->setId($id);
 			}
+
+			$this->savePeople($data);
 		}
 
 		return $id;
@@ -167,7 +193,7 @@ class FilmDAO extends DAO {
 		$result = false;
 
 		if($data !== null && $data instanceof Film) {
-			$parameters = array(':id' => $dat->getId());
+			$parameters = array(':id' => $data->getId());
 
 			$stmt = $this->getConnection()->prepare('
 				DELETE FROM film WHERE id = :id

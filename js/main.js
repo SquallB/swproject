@@ -50,6 +50,45 @@
 			restrict: 'E',
 			templateUrl: 'film.html',
 			controller: ['$http', '$scope', function($http, $scope) {
+				$url = 'http://dbpedia.org/sparql';
+				$query =   'PREFIX : <http://dbpedia.org/resource/>\
+							PREFIX dbpedia2: <http://dbpedia.org/property/>\
+							PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\
+							PREFIX dbo: <http://dbpedia.org/ontology/>\
+							SELECT ?titre, ?uri WHERE {\
+								:Star_Wars dbpedia2:films ?uri.\
+								?uri rdfs:label ?titre.\
+								FILTER ( lang(?titre) = "en" )\
+							}';
+				$http({
+					method: 'POST',
+					url: $url,
+					headers: {
+						'Content-type' : 'application/x-www-form-urlencoded',
+		            	'Accept' : 'application/sparql-results+json'
+		            },
+	                params: { 
+	                   query : $query,
+	                   format: "json"
+           			}
+				}).
+				success(function(data, status) {
+					console.log(data);
+
+					$query =   'PREFIX : <http://dbpedia.org/resource/>\
+							PREFIX dbpedia2: <http://dbpedia.org/property/>\
+							PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\
+							PREFIX dbo: <http://dbpedia.org/ontology/>\
+							SELECT ?name, ?actorURI WHERE {\
+								?uri dbo:starring ?actorURI.\
+								?actorURI rdfs:label ?name.\
+								FILTER ( lang(?name) = "en" )\
+							}';
+				})
+				.error(function(data, status) {
+					console.log('error');
+				});
+
 				$scope.film = null;
 				var c = $('#thumbcarousel');
 				$scope.nbActorsActive = Math.ceil($('#thumbcarousel').width() / 200);
