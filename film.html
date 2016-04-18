@@ -22,7 +22,7 @@
             <p><strong>Director :</strong> <span ng-repeat="director in film.people.director">{{director.first_name}} {{director.last_name}}  </span></p>
             <p><strong>Writer :</strong> <span ng-repeat="writer in film.people.writer">{{writer.first_name}} {{writer.last_name}}  </span></p>
             <p><strong>Composer :</strong> <span ng-repeat="composer in film.people.composer">{{composer.first_name}} {{composer.last_name}}  </span></p>
-            <p><strong>Release date :</strong> {{film.release_date | date:"dd/MM/yyyy"}}</p>
+            <p><strong>Year :</strong> {{film.year}}</p>
             <p><strong>Runtime :</strong> {{film.running_time}} minutes</p>
             <p>{{film.summary}}</p>
           </div>

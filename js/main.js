@@ -58,7 +58,7 @@
 
 				$http({
 					method: 'GET',
-					url: 'http://localhost/swproject/api/dbpedia/'
+					url: 'http://localhost/swproject/api/dbpedia/film'
 				}).
 				success(function(data, status) {
 				  if(status === 200) {
@@ -66,14 +66,29 @@
 					$scope.filmId = 0;
 					$scope.changeFilm(0);
 
-				  	for(var film in data) {
-					  $http({
-						  method: 'POST',
-						  url: 'http://localhost/swproject/api/film/',
-						  data: "film=" + JSON.stringify(film),
-						  headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-					  })
-				  }
+				  	for(var index in $scope.films) {
+						(function() {
+							var film = data[index];
+							film.people = [];
+							
+							$http({
+								method: 'GET',
+								url: 'http://localhost/swproject/api/dbpedia/film/people/' + film.name
+							}).success(function (data, status) {
+								if (status === 200) {
+									film.people = data;
+									$scope.changeActors();
+								}
+
+								$http({
+								 method: 'POST',
+								 url: 'http://localhost/swproject/api/film/',
+								 data: "film=" + JSON.stringify(film),
+								 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+								 })
+							});
+						})();
+				  	}
 				  }
 				  else {
 					  $http({
@@ -90,17 +105,21 @@
 				  }
 				 });
 
+				$scope.changeActors = function() {
+					if($scope.film && $scope.film.people && $scope.film.people.actor) {
+						$scope.itemsRange = [];
+
+						for (var i = $scope.nbActorsActive; i < $scope.film.people.actor.length; i += $scope.nbActorsActive) {
+							$scope.itemsRange.push(i);
+						}
+					}
+				}
+
 				$scope.changeFilm = function() {
 					if($scope.films.length > 0) {
 						$scope.film = $scope.films[$scope.filmId];
 
-						if($scope.film !== undefined && $scope.film.people !== undefined && $scope.film.people.actor !== undefined) {
-							$scope.itemsRange = [];
-
-							for (var i = $scope.nbActorsActive; i < $scope.film.people.actor.length; i += $scope.nbActorsActive) {
-								$scope.itemsRange.push(i);
-							}
-						}
+						$scope.changeActors();
 					}
 				}
 

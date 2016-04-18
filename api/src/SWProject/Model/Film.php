@@ -6,7 +6,7 @@ use \JsonSerializable;
 class Film implements JsonSerializable {
 	private $id;
 	private $name;
-	private $releaseDate;
+	private $year;
 	private $runningTime;
 	private $image;
 	private $people;
@@ -22,8 +22,8 @@ class Film implements JsonSerializable {
 				$this->setName($data['name']);
 			}
 
-			if(isset($data['release_date'])) {
-				$this->setReleaseDate($data['release_date']);
+			if(isset($data['year'])) {
+				$this->setYear($data['year']);
 			}
 
 			if(isset($data['image'])) {
@@ -60,12 +60,12 @@ class Film implements JsonSerializable {
 		}
 	}
 
-	public function getReleaseDate() {
-		return $this->releaseDate;
+	public function getYear() {
+		return $this->year;
 	}
 
-	public function setReleaseDate($releaseDate) {
-		$this->releaseDate = $releaseDate;
+	public function setYear($year) {
+		$this->year = $year;
 	}
 
 	public function getRunningTime() {
@@ -106,11 +106,23 @@ class Film implements JsonSerializable {
 		$this->summary = $summary;
 	}
 
+	static function compare($a, $b) {
+		if($a->getYear() === $b->getYear()) {
+			return 0;
+		}
+		else if($a->getYear() > $b->getYear()) {
+			return 1;
+		}
+		else if($a->getYear() < $b->getYear()) {
+			return -1;
+		}
+	}
+
 	public function jsonSerialize() {
 		return [
 			'id' => $this->getId(),
 			'name' => $this->getName(),
-			'release_date' => $this->getReleaseDate(),
+			'year' => $this->getYear(),
 			'running_time' => $this->getRunningTime(),
 			'image' => $this->getImage(),
 			'people' => $this->getPeople(),
