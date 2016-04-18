@@ -150,7 +150,7 @@ class FilmDAO extends DAO {
 	public function save($data) {
 		$id = null;
 
-		if($data !== null && $data instanceof Film) {
+		if($data !== null && $data instanceof Film && !empty($data->getName())) {
 			if($data->getId() !== null) {
 				$id = $this->update($data);
 			}

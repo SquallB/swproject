@@ -22,7 +22,6 @@ class FilmControllerProvider implements ControllerProviderInterface {
          * @apiSuccess {Array} films The films
          */
         $controllers->get('/', function (Application $app)  {
-            $result = array();
             $status = 200;
             $filmDAO = new FilmDAO();
             $result = $filmDAO->findAll();
@@ -42,7 +41,6 @@ class FilmControllerProvider implements ControllerProviderInterface {
          * @apiSuccess {Film} film The film
          */
         $controllers->get('/{id}', function (Application $app, $id)  {
-            $result = array();
             $status = 200;
             $filmDAO = new FilmDAO();
             $result = $filmDAO->find($id);

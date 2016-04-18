@@ -38,9 +38,11 @@ class Person implements JsonSerializable {
 				$this->setCharacter($data['character']);
 			}
 
+			$summary = '';
 			if(isset($data['summary'])) {
-				$this->setSummary($data['summary']);
+				$summary = $data['summary'];
 			}
+			$this->setSummary($summary);
 		}
 	}
 
@@ -98,13 +100,11 @@ class Person implements JsonSerializable {
 		$this->character = $character;
 	}
 
-	public function getSummary()
-	{
+	public function getSummary() {
 		return $this->summary;
 	}
 
-	public function setSummary($summary)
-	{
+	public function setSummary($summary) {
 		$this->summary = $summary;
 	}
 

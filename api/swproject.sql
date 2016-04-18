@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS `person` (
   `last_name` varchar(50) NOT NULL,
   `birthdate` date NOT NULL,
   `picture` varchar(500) NOT NULL,
+  `summary` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 

@@ -39,13 +39,19 @@ class DBpediaControllerProvider implements ControllerProviderInterface {
         if(is_array($actors)) {
             foreach ($actors as $actor) {
                 //remove brackets in name
-                $name = preg_replace('/\ *\([^)]+\)\ */', '', $actor['name']['value']);
+                $name = preg_replace('/\ *\([^)]+\)\ */', '', htmlentities($actor['name']['value']));
                 $lastSpace = strrpos($name, ' ');
                 $firstName = substr($name, 0, $lastSpace);
                 $lastName = substr($name, $lastSpace + 1);
                 $picture = '';
+                $birthdate = htmlentities($actor['birthDate']['value']);
+                //check si la date contient seulement l'année
+                if(strlen($birthdate) === 4) {
+                    $birthdate .= '-01-01';
+                }
+                $summary = htmlentities($summary = $actor['abstract']['value']);
 
-                $person = new Person(array('first_name' => $firstName, 'last_name' => $lastName, 'birthdate' => $actor['birthDate']['value'], 'picture' => $picture, 'summary' => $actor['abstract']['value']));
+                $person = new Person(array('first_name' => $firstName, 'last_name' => $lastName, 'birthdate' => $birthdate, 'picture' => $picture, 'summary' => $summary));
                 $array[] = $person;
             }
         }
@@ -95,15 +101,17 @@ class DBpediaControllerProvider implements ControllerProviderInterface {
 
             if(is_array($films)) {
                 foreach ($films as $film) {
+                    $name = htmlentities($film['titre']['value']);
                     $picture = '';
                     $runtime = 0;
-                    $year = substr($film['yearCategory']['value'], 0, 4);
+                    $year = htmlentities(substr($film['yearCategory']['value'], 0, 4));
+                    $summary = htmlentities($film['summary']['value']);
 
                     if (isset($film['runtime'])) {
-                        $runtime = $film['runtime']['value'] / 60;
+                        $runtime = intval($film['runtime']['value'] / 60);
                     }
 
-                    $filmObject = new Film(array('name' => $film['titre']['value'], 'summary' => $film['summary']['value'], 'year' => $year, 'running_time' => intval($runtime), 'image' => $picture));
+                    $filmObject = new Film(array('name' => $name, 'summary' => $summary, 'year' => $year, 'running_time' => $runtime, 'image' => $picture));
                     $result[] = $filmObject;
                 }
             }

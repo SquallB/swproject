@@ -81,7 +81,7 @@
 										$http({
 											method: 'POST',
 											url: 'http://localhost/swproject/api/film/',
-											data: "film=" + JSON.stringify(film),
+											data: "film=" + encodeURIComponent(JSON.stringify(film)),
 											headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 										}).then(function successCallback(response) {
 											if (response.status === 200) {

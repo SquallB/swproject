@@ -44,7 +44,7 @@ class PersonDAO extends DAO {
 	public function save($data) {
 		$id = null;
 
-		if($data !== null && $data instanceof Person) {
+		if($data !== null && $data instanceof Person && !empty($data->getFirstName()) && !empty($data->getLastName())) {
 			if($data->getId() !== null) {
 				$id = $this->update($data);
 			}

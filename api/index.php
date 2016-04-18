@@ -1,5 +1,7 @@
 <?php
 
+header('Content-Type: application/json; Charset=UTF-8');
+
 $loader = require_once __DIR__.'/vendor/autoload.php';
 $loader->add('SWProject', __DIR__.'/src');
 

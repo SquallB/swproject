@@ -49,7 +49,7 @@ class Film implements JsonSerializable {
 			$this->setPeople($people);
 
 			if(isset($data['summary'])) {
-				$this->setSummary($data['summary']);
+				$this->setSummary(html_entity_decode($data['summary']));
 			}
 		}
 	}

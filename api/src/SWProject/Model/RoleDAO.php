@@ -49,7 +49,7 @@ class RoleDAO extends DAO {
 				$id = $this->update($data);
 			}
 			else {
-				$parameters = array(':name' => $name);
+				$parameters = array(':name' => $data->getName());
 
 				$stmt = $this->getConnection()->prepare('
 					SELECT id FROM role WHERE name = :name
