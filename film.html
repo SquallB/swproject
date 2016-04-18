@@ -13,15 +13,15 @@
         <div class="col-md-4">
           <div class="cover">
             <figure class="figure figure-cover">
-              <img src="{{film.image}}" class="figure-img img-fluid img-rounded" alt="{{film.name}}">
+              <img src="{{film.image}}" class="figure-img img-fluid img-rounded" alt="{{film.name}} Image">
             </figure>
           </div>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-8">
           <div class="description">
-            <p><strong>Director :</strong> <span ng-repeat="director in film.people.director">{{director.first_name}} {{director.last_name}}  </span></p>
-            <p><strong>Writer :</strong> <span ng-repeat="writer in film.people.writer">{{writer.first_name}} {{writer.last_name}}  </span></p>
-            <p><strong>Composer :</strong> <span ng-repeat="composer in film.people.composer">{{composer.first_name}} {{composer.last_name}}  </span></p>
+            <p><strong>Director(s) :</strong> <span ng-repeat="director in film.people.director">{{director.first_name}} {{director.last_name}}  </span></p>
+            <p><strong>Writer(s) :</strong> <span ng-repeat="writer in film.people.writer">{{writer.first_name}} {{writer.last_name}}  </span></p>
+            <p><strong>Composer(s) :</strong> <span ng-repeat="composer in film.people.composer">{{composer.first_name}} {{composer.last_name}}  </span></p>
             <p><strong>Year :</strong> {{film.year}}</p>
             <p><strong>Runtime :</strong> {{film.running_time}} minutes</p>
             <p>{{film.summary}}</p>
@@ -38,7 +38,7 @@
           <div id="thumbcarousel" class="carousel slide" data-interval="false">
             <div class="carousel-inner">
               <div class="item active">
-                <div ng-repeat="actor in film.people.actor|limitTo:nbActorsActive" data-target="#carousel" data-slide-to="0" class="thumbnail thumb"><img src="{{actor.picture}}" alt="{{actor.first_name}} {{actor.last_name}} Image" class="img-responsive actor">
+                <div ng-repeat="actor in film.people.actor|limitTo:nbActorsActive" data-target="#carousel" data-slide-to="0" class="thumbnail thumb carousel-item"><img ng-click="displayModal(actor)" src="{{actor.picture}}" alt="{{actor.first_name}} {{actor.last_name}} Image" class="img-responsive actor" />
                   <div class="caption">
                     <h4>{{actor.first_name}} {{actor.last_name}}</h4>
                     <h5>{{actor.character}}</h5>
@@ -46,7 +46,7 @@
                 </div>
               </div><!-- /item -->
               <div class="item" ng-repeat="i in itemsRange">
-                <div ng-repeat="actor in film.people.actor|limitTo:nbActorsActive:i" data-target="#carousel" data-slide-to="0" class="thumbnail thumb"><img src="{{actor.picture}}" alt="{{actor.first_name}} {{actor.last_name}} Image" class="img-responsive actor">
+                <div ng-repeat="actor in film.people.actor|limitTo:nbActorsActive:i" data-target="#carousel" data-slide-to="0" class="thumbnail thumb"><img src="{{actor.picture}}" alt="{{actor.first_name}} {{actor.last_name}} Image" class="img-responsive actor" />
                   <div class="caption">
                     <h4>{{actor.first_name}} {{actor.last_name}}</h4>
                   </div>
@@ -75,4 +75,19 @@
     </a>
 
   </div><!-- /container -->
-</div> <!-- /movie --> 
+</div> <!-- /movie -->
+
+<div id="modal-actor" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">{{actor.first_name}} {{actor.last_name}}</h4>
+      </div>
+      <div class="modal-body">
+        <p><strong>Birthdate:</strong> {{actor.birthdate}}</p>
+        <p>{{actor.summary}}</p>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

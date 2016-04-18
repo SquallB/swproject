@@ -27,6 +27,10 @@ class FilmControllerProvider implements ControllerProviderInterface {
             $filmDAO = new FilmDAO();
             $result = $filmDAO->findAll();
 
+            if(count($result) > 1) {
+                usort($result, array("SWProject\\Model\\Film", "compare"));
+            }
+
             return $app->json($result, $status);
         });
 

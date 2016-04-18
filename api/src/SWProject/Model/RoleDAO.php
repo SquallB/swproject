@@ -3,8 +3,8 @@
 namespace SWProject\Model;
 
 class RoleDAO extends DAO {
-	public function __constrct(PDO $connection = null) {
-		parent::__constrct($connection);
+	public function __construct(\PDO $connection = null) {
+		parent::__construct($connection);
 	}
 
 	public function find($id) {
@@ -49,14 +49,27 @@ class RoleDAO extends DAO {
 				$id = $this->update($data);
 			}
 			else {
-				$parameters = array(':name' => $data->getName());
+				$parameters = array(':name' => $name);
 
 				$stmt = $this->getConnection()->prepare('
-					INSERT INTO role (name) VALUES (:name)
+					SELECT id FROM role WHERE name = :name
 				');
 				$stmt->execute($parameters);
 
-				$id = $this->getConnection()->lastInsertId();
+				if($stmt->rowCount() > 0) {
+					$data->setId($stmt->fetch()['id']);
+					$id = $this->update($data);
+				}
+				else {
+					$parameters = array(':name' => $data->getName());
+
+					$stmt = $this->getConnection()->prepare('
+						INSERT INTO role (name) VALUES (:name)
+					');
+					$stmt->execute($parameters);
+
+					$id = $this->getConnection()->lastInsertId();
+				}
 			}
 		}
 
@@ -84,7 +97,7 @@ class RoleDAO extends DAO {
 		$result = false;
 
 		if($data !== null && $data instanceof Role) {
-			$parameters = array(':id' => $dat->getId());
+			$parameters = array(':id' => $data->getId());
 
 			$stmt = $this->getConnection()->prepare('
 				DELETE FROM role WHERE id = :id

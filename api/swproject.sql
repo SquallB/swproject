@@ -45,7 +45,7 @@ DROP TABLE IF EXISTS `film`;
 CREATE TABLE IF NOT EXISTS `film` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
-  `release_date` date NOT NULL,
+  `year` int(11) NOT NULL,
   `running_time` int(11) NOT NULL,
   `image` varchar(500) NOT NULL,
   `summary` text NOT NULL,

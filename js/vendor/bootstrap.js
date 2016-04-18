@@ -511,8 +511,6 @@ if (typeof jQuery === 'undefined') {
     if (slideIndex) {
       $target.data('bs.carousel').to(slideIndex)
     }
-
-    e.preventDefault()
   }
 
   $(document)

@@ -34,6 +34,20 @@ class Film implements JsonSerializable {
 				$this->setRunningTime($data['running_time']);
 			}
 
+			$people = array();
+			if(isset($data['people']) && is_array($data['people'])) {
+				foreach($data['people'] as $role => $rolePeople) {
+					$roleArray = array();
+					if(is_array($rolePeople)) {
+						foreach($rolePeople as $person) {
+							$roleArray[] = new Person($person);
+						}
+					}
+					$people[$role] = $roleArray;
+				}
+			}
+			$this->setPeople($people);
+
 			if(isset($data['summary'])) {
 				$this->setSummary($data['summary']);
 			}

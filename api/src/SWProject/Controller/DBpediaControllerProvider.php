@@ -45,7 +45,7 @@ class DBpediaControllerProvider implements ControllerProviderInterface {
                 $lastName = substr($name, $lastSpace + 1);
                 $picture = '';
 
-                $person = new Person(array('first_name' => $firstName, 'last_name' => $lastName, 'birthdate' => $actor['birthDate']['value'], 'picture' => $picture));
+                $person = new Person(array('first_name' => $firstName, 'last_name' => $lastName, 'birthdate' => $actor['birthDate']['value'], 'picture' => $picture, 'summary' => $actor['abstract']['value']));
                 $array[] = $person;
             }
         }

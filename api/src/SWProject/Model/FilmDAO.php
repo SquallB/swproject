@@ -3,8 +3,8 @@
 namespace SWProject\Model;
 
 class FilmDAO extends DAO {
-	public function __constrct(PDO $connection = null) {
-		parent::__constrct($connection);
+	public function __construct(\PDO $connection = null) {
+		parent::__construct($connection);
 	}
 
 	private function findPeople($id) {
@@ -79,12 +79,14 @@ class FilmDAO extends DAO {
 
 			foreach($rolePeople as $person) {
 				$personId = $personDAO->save($person);
-				$peopleIds[] = $personId;
-				$parameters[':id_person'] = $personId;
+				if ($personId !== null) {
+					$peopleIds[] = $personId;
+					$parameters[':id_person'] = $personId;
 
-				$stmt1->execute($parameters);
-				if ($stmt1->rowCount() === 0) {
-					$stmt2->execute($parameters);
+					$stmt1->execute($parameters);
+					if ($stmt1->rowCount() === 0) {
+						$stmt2->execute($parameters);
+					}
 				}
 			}
 		}
@@ -153,16 +155,29 @@ class FilmDAO extends DAO {
 				$id = $this->update($data);
 			}
 			else {
-				$parameters = array(':name' => $data->getName(), ':year' => $data->getYear(), ':running_time' => $data->getRunningTime(),
-									':image' => $data->getImage(), ':summary' => $data->getSummary());
+				$parameters = array(':name' => $data->getName());
 
 				$stmt = $this->getConnection()->prepare('
-					INSERT INTO film (name, year, running_time, image, summary) VALUES (:name, :year, :running_time, :image, :summary)
+					SELECT id FROM film WHERE name = :name
 				');
 				$stmt->execute($parameters);
 
-				$id = $this->getConnection()->lastInsertId();
-				$data->setId($id);
+				if($stmt->rowCount() > 0) {
+					$data->setId($stmt->fetch()['id']);
+					$id = $this->update($data);
+				}
+				else {
+					$parameters = array(':name' => $data->getName(), ':year' => $data->getYear(), ':running_time' => $data->getRunningTime(),
+						':image' => $data->getImage(), ':summary' => $data->getSummary());
+
+					$stmt = $this->getConnection()->prepare('
+						INSERT INTO film (name, year, running_time, image, summary) VALUES (:name, :year, :running_time, :image, :summary)
+					');
+					$stmt->execute($parameters);
+
+					$id = $this->getConnection()->lastInsertId();
+					$data->setId($id);
+				}
 			}
 
 			$this->savePeople($data);
