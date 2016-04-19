@@ -105,7 +105,7 @@ class Person implements JsonSerializable {
 	}
 
 	public function setSummary($summary) {
-		$this->summary = $summary;
+		$this->summary = html_entity_decode($summary);
 	}
 
 	public function jsonSerialize() {

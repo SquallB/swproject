@@ -9,7 +9,7 @@
 
   <div class="movie-description">
     <div class="container-fluid">
-      <div class="row row-cover">
+      <div class="row-fluid row-cover">
         <div class="col-md-4">
           <div class="cover">
             <figure class="figure figure-cover">
@@ -28,54 +28,52 @@
           </div>
         </div>
       </div>
+
+        <!-- Example row of columns -->
+        <div class="row-fluid row-actors">
+            <div class="col-md-12"><h3>Acteurs</h3></div>
+            <div class="clearfix">
+                <div id="thumbcarousel" class="carousel slide" data-interval="false">
+                    <div class="carousel-inner">
+                        <div class="item active">
+                            <div ng-repeat="actor in film.people.actor|limitTo:nbActorsActive" data-target="#carousel" data-slide-to="0" class="thumbnail thumb carousel-item"><img ng-click="displayModal(actor)" src="{{actor.picture}}" alt="{{actor.first_name}} {{actor.last_name}} Image" class="img-responsive actor" />
+                                <div class="caption">
+                                    <h4>{{actor.first_name}} {{actor.last_name}}</h4>
+                                    <h5>{{actor.character}}</h5>
+                                </div>
+                            </div>
+                        </div><!-- /item -->
+                        <div class="item" ng-repeat="i in itemsRange">
+                            <div ng-repeat="actor in film.people.actor|limitTo:nbActorsActive:i" data-target="#carousel" data-slide-to="0" class="thumbnail thumb"><img src="{{actor.picture}}" alt="{{actor.first_name}} {{actor.last_name}} Image" class="img-responsive actor" />
+                                <div class="caption">
+                                    <h4>{{actor.first_name}} {{actor.last_name}}</h4>
+                                </div>
+                            </div>
+                        </div><!-- /item -->
+
+                        <a class="left carousel-control control1" href="#thumbcarousel" role="button" data-slide="prev">
+                            <span class="glyphicon glyphicon-chevron-left"></span>
+                        </a>
+                        <a class="right carousel-control control1" href="#thumbcarousel" role="button" data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </a>
+                    </div> <!-- /carousel-inner -->
+                </div><!-- /carousel -->
+            </div> <!-- /clearfix -->
+        </div><!-- /row-actors -->
     </div>
   </div> <!-- /movie-description -->
-  <div class="container-fluid">
-    <!-- Example row of columns -->
-    <div class="row row-actors">
-      <div class="col-md-12"><h3>Acteurs</h3></div>
-        <div class="clearfix">
-          <div id="thumbcarousel" class="carousel slide" data-interval="false">
-            <div class="carousel-inner">
-              <div class="item active">
-                <div ng-repeat="actor in film.people.actor|limitTo:nbActorsActive" data-target="#carousel" data-slide-to="0" class="thumbnail thumb carousel-item"><img ng-click="displayModal(actor)" src="{{actor.picture}}" alt="{{actor.first_name}} {{actor.last_name}} Image" class="img-responsive actor" />
-                  <div class="caption">
-                    <h4>{{actor.first_name}} {{actor.last_name}}</h4>
-                    <h5>{{actor.character}}</h5>
-                  </div>
-                </div>
-              </div><!-- /item -->
-              <div class="item" ng-repeat="i in itemsRange">
-                <div ng-repeat="actor in film.people.actor|limitTo:nbActorsActive:i" data-target="#carousel" data-slide-to="0" class="thumbnail thumb"><img src="{{actor.picture}}" alt="{{actor.first_name}} {{actor.last_name}} Image" class="img-responsive actor" />
-                  <div class="caption">
-                    <h4>{{actor.first_name}} {{actor.last_name}}</h4>
-                  </div>
-                </div>
-              </div><!-- /item -->
-            </div> <!-- /carousel-inner -->
-            <a class="left carousel-control control1" href="#thumbcarousel" role="button" data-slide="prev">
-              <span class="glyphicon glyphicon-chevron-left"></span>
-            </a>
-            <a class="right carousel-control control1" href="#thumbcarousel" role="button" data-slide="next">
-              <span class="glyphicon glyphicon-chevron-right"></span>
-            </a>
-          </div><!-- /carousel -->
-      </div> <!-- /clearfix -->
-
-    </div><!-- /row-actors -->
-
-    <!-- Left and right controls -->
-    <a ng-click="previousFilm()" class="left carousel-control control1" href="#" role="button" data-slide="prev1">
-      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a ng-click="nextFilm()" class="right carousel-control control1" href="#" role="button" data-slide="next1">
-      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-      <span class="sr-only">Next</span>
-    </a>
-
-  </div><!-- /container -->
 </div> <!-- /movie -->
+
+<!-- Left and right controls -->
+<a ng-click="previousFilm()" class="left carousel-control control1" href="#" role="button" data-slide="prev1">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+</a>
+<a ng-click="nextFilm()" class="right carousel-control control1" href="#" role="button" data-slide="next1">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+</a>
 
 <div id="modal-actor" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog">

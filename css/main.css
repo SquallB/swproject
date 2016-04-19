@@ -1,4 +1,4 @@
-#movie{
+#movie {
     margin: 0 auto;
     max-width:80%;
     height:100%;
@@ -15,24 +15,24 @@
 }
 
 
-.movie-description{
+.movie-description {
 	background-color: #FFFFFF;
 	margin-bottom: 0%;
 	padding: 0px;
 	margin-left: 0px;
 }
 
-.figure-img{
+.figure-img {
 	width: 100%;
 	padding: 0px;
 
 
 }
-.row-cover .col-md-4{
+.row-cover .col-md-4 {
 	padding: 0px;
 }
 
-.row .description{
+.row .description {
 	display: block;
 	float: none;
 	height: 100px;/*Dynamically set*/
@@ -40,7 +40,7 @@
 	margin-bottom: 10%;
 
 }
-.row .description p{
+.row .description p {
 	font-size: 100%;
 
 }
@@ -55,7 +55,8 @@
 	padding: 2px;
 }
 .control1.left, .control1.right {
-    background-image: none
+    background-image: none;
+	color: #000000;
 }
 
 .actor {

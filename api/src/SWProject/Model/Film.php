@@ -49,7 +49,7 @@ class Film implements JsonSerializable {
 			$this->setPeople($people);
 
 			if(isset($data['summary'])) {
-				$this->setSummary(html_entity_decode($data['summary']));
+				$this->setSummary($data['summary']);
 			}
 		}
 	}
@@ -117,7 +117,7 @@ class Film implements JsonSerializable {
 	}
 
 	public function setSummary($summary) {
-		$this->summary = $summary;
+		$this->summary = html_entity_decode($summary);
 	}
 
 	static function compare($a, $b) {
