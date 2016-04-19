@@ -83,13 +83,7 @@
 											url: 'http://localhost/swproject/api/film/',
 											data: "film=" + encodeURIComponent(JSON.stringify(film)),
 											headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-										}).then(function successCallback(response) {
-											if (response.status === 200) {
-												$scope.films = response.data;
-												$scope.filmId = 0;
-												$scope.changeFilm(0);
-											}
-										}, function errorCallback(response) {});
+										});
 									}
 								}, function errorCallback(response) {});
 							})();
