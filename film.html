@@ -36,7 +36,7 @@
                 <div id="thumbcarousel" class="carousel slide" data-interval="false">
                     <div class="carousel-inner">
                         <div class="item active">
-                            <div ng-repeat="actor in film.people.actor|limitTo:nbActorsActive" data-target="#carousel" data-slide-to="0" class="thumbnail thumb carousel-item"><img ng-click="displayModal(actor)" src="{{actor.picture}}" alt="{{actor.first_name}} {{actor.last_name}} Image" class="img-responsive actor" />
+                            <div ng-repeat="actor in film.people.actor|limitTo:nbActorsActive" ng-click="displayModal(actor)" data-target="#carousel" data-slide-to="0" class="thumbnail thumb carousel-item"><img src="{{actor.picture}}" alt="{{actor.first_name}} {{actor.last_name}} Image" class="img-responsive actor" />
                                 <div class="caption">
                                     <h4>{{actor.first_name}} {{actor.last_name}}</h4>
                                     <h5>{{actor.character}}</h5>
@@ -44,7 +44,7 @@
                             </div>
                         </div><!-- /item -->
                         <div class="item" ng-repeat="i in itemsRange">
-                            <div ng-repeat="actor in film.people.actor|limitTo:nbActorsActive:i" data-target="#carousel" data-slide-to="0" class="thumbnail thumb"><img src="{{actor.picture}}" alt="{{actor.first_name}} {{actor.last_name}} Image" class="img-responsive actor" />
+                            <div ng-repeat="actor in film.people.actor|limitTo:nbActorsActive:i" ng-click="displayModal(actor)" data-target="#carousel" data-slide-to="0" class="thumbnail thumb"><img src="{{actor.picture}}" alt="{{actor.first_name}} {{actor.last_name}} Image" class="img-responsive actor" />
                                 <div class="caption">
                                     <h4>{{actor.first_name}} {{actor.last_name}}</h4>
                                 </div>

@@ -24,32 +24,40 @@ class DBpediaControllerProvider implements ControllerProviderInterface {
         $query = '  PREFIX dbo: <http://dbpedia.org/ontology/>
                     PREFIX dbp: <http://dbpedia.org/property/name/>
                     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-                    SELECT ?name ?birthDate ?abstract
+                    PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+                    SELECT ?name (SAMPLE(?bd) AS ?birthDate) (SAMPLE(?abs) AS ?abstract) (SAMPLE(?pic) AS ?picture)
                     WHERE {
-                    <http://dbpedia.org/resource/'.$uri.'> dbo:'.$role.' ?starring.
-                    ?starring rdfs:label ?name;
-                    dbo:birthDate ?birthDate;
-                    dbo:abstract ?abstract.
-                    FILTER ( lang(?abstract) = "en" )
-                    FILTER ( lang(?name) = "en" )
-            }';
-        $actors = self::sparqlRequest($query);
+                        <http://dbpedia.org/resource/'.$uri.'> dbo:'.$role.' ?person.
+                        ?person rdfs:label ?name;
+                        dbo:birthDate ?bd;
+                        dbo:abstract ?abs.
+                        OPTIONAL {
+                            ?person foaf:depiction ?pic.
+                        }
+                        FILTER ( lang(?abs) = "en" )
+                        FILTER ( lang(?name) = "en" )
+                    }
+                    GROUP BY ?name';
+        $persons = self::sparqlRequest($query);
 
         $array = array();
-        if(is_array($actors)) {
-            foreach ($actors as $actor) {
+        if(is_array($persons)) {
+            foreach ($persons as $person) {
                 //remove brackets in name
-                $name = preg_replace('/\ *\([^)]+\)\ */', '', htmlentities($actor['name']['value']));
+                $name = preg_replace('/\ *\([^)]+\)\ */', '', htmlentities($person['name']['value']));
                 $lastSpace = strrpos($name, ' ');
                 $firstName = substr($name, 0, $lastSpace);
                 $lastName = substr($name, $lastSpace + 1);
                 $picture = '';
-                $birthdate = htmlentities($actor['birthDate']['value']);
+                if(isset($person['picture'])) {
+                    $picture = htmlentities($person['picture']['value']);
+                }
+                $birthdate = htmlentities($person['birthDate']['value']);
                 //check si la date contient seulement l'année
                 if(strlen($birthdate) === 4) {
                     $birthdate .= '-01-01';
                 }
-                $summary = htmlentities($summary = $actor['abstract']['value']);
+                $summary = htmlentities($summary = $person['abstract']['value']);
 
                 $person = new Person(array('first_name' => $firstName, 'last_name' => $lastName, 'birthdate' => $birthdate, 'picture' => $picture, 'summary' => $summary));
                 $array[] = $person;
@@ -80,18 +88,17 @@ class DBpediaControllerProvider implements ControllerProviderInterface {
                         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
                         PREFIX dbo: <http://dbpedia.org/ontology/>
                         PREFIX dct: <http://purl.org/dc/terms/>
-                        SELECT ?titre ?uri ?summary ?runtime ?yearCategory
+                        SELECT DISTINCT ?titre ?uri ?summary ?runtime ?yearCategory
                         WHERE {
                             :Star_Wars dbpedia2:films ?uri.
                             ?uri rdfs:label ?titre;
                             dbo:abstract ?summary;
                             dct:subject ?category.
                             ?category rdfs:label ?yearCategory.
-
                             OPTIONAL {
                                 ?uri dbo:runtime ?runtime.
+                                ?uri foaf:depiction ?picture.
                             }
-                            
                             FILTER ( lang(?titre) = "en" ).
                             FILTER ( lang(?summary) = "en" ).
                             FILTER ( lang(?yearCategory) = "en" ).
@@ -103,14 +110,15 @@ class DBpediaControllerProvider implements ControllerProviderInterface {
                 foreach ($films as $film) {
                     $name = htmlentities($film['titre']['value']);
                     $picture = '';
+                    if(isset($person['picture'])) {
+                        $picture = htmlentities($film['picture']['value']);
+                    }
                     $runtime = 0;
-                    $year = htmlentities(substr($film['yearCategory']['value'], 0, 4));
-                    $summary = htmlentities($film['summary']['value']);
-
                     if (isset($film['runtime'])) {
                         $runtime = intval($film['runtime']['value'] / 60);
                     }
-
+                    $year = htmlentities(substr($film['yearCategory']['value'], 0, 4));
+                    $summary = htmlentities($film['summary']['value']);
                     $filmObject = new Film(array('name' => $name, 'summary' => $summary, 'year' => $year, 'running_time' => $runtime, 'image' => $picture));
                     $result[] = $filmObject;
                 }
